@@ -31,11 +31,10 @@ import EmailValidationComponent from "./components/email_validation/email.valida
 import { USER_ROLE } from "./constants/role";
 import PostListsComponent from "./components/dashboard/posts/post_lists.component";
 import ProfileComponent from "./components/dashboard/profile/profile.component";
+import PaymentComponent from "./components/home/pricing/payment.component";
 import Contact from "./components/contactus/contactus";
 import HelpCenterComponent from "./components/help_center/help_center.component";
 import ErrorBoundary from "./components/ErrorBoundary";
-
-
 import AboutUsComponent from "./components/footer/about-us.tsx";
 import CareerComponent from "./components/footer/career.tsx";
 // import ContactUsComponent from "./components/footer/contact-us.tsx";
@@ -53,10 +52,10 @@ const ProtectedRoute = ({
 }) => {
   const user = getUserInfo();
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
   if (!allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/" />;
   }
   return element;
 };
@@ -251,8 +250,7 @@ function App() {
           path="/auth/email-validation"
           element={<EmailValidationComponent />}
         />
-
-
+        <Route path="/payment" element={<PaymentComponent />} />
         <Route
           path="/signup"
           element={

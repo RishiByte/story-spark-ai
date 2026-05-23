@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const pricingPlans = [
   {
@@ -13,6 +15,7 @@ const pricingPlans = [
     buttonLabel: "Get Started",
     buttonStyle: "bg-gray-500 text-gray-300 hover:bg-gray-600",
     highlight: false,
+    linkto: "/signup"
   },
   {
     title: "Pro",
@@ -24,9 +27,12 @@ const pricingPlans = [
       "Priority support",
       "Analytics dashboard",
     ],
+    
     buttonLabel: "Start Pro Trial",
     buttonStyle: "bg-indigo-600 text-white hover:bg-indigo-700",
     highlight: true,
+    linkto: "/payment"
+    
   },
   {
     title: "Enterprise",
@@ -41,10 +47,12 @@ const pricingPlans = [
     buttonLabel: "Contact Sales",
     buttonStyle: "bg-gray-800 text-white hover:bg-gray-900",
     highlight: false,
+    linkto: "/payment"
   },
 ];
 
 const PricingComponent = () => {
+  const navigate = useNavigate();
   return (
     <section className="mb-16 py-12" id="pricing-section">
       <div className="text-center mb-12">
@@ -98,12 +106,19 @@ const PricingComponent = () => {
                 </li>
               ))}
             </ul>
-            <button
-              className={`w-full !rounded-button px-4 py-2 mt-auto ${plan.buttonStyle}`}
-            >
-              {plan.buttonLabel}
-            </button>
-          </div>
+            <button  className="..." 
+  onClick={() => {
+    navigate(plan.linkto);
+  }}
+>
+  <Link 
+  to={plan.linkto} 
+  className={`mt-6 block w-full text-center font-medium py-2.5 px-4 rounded-lg transition-colors ${plan.buttonStyle}`}
+>
+  {plan.buttonLabel}
+</Link>
+</button>
+              </div>
         ))}
       </div>
     </section>

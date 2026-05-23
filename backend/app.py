@@ -16,7 +16,7 @@ Place at: story-spark-ai/ml/app.py
 import sys
 import os
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "ml"))
-
+from ml.score_api import score_bp
 import json
 import random
 import numpy as np
@@ -432,6 +432,7 @@ from flask import Flask, request, jsonify
 from detect import detect
 
 app = Flask(__name__)
+app.register_blueprint(score_bp)
 
 @app.route("/detect", methods=["POST"])
 def detect_route():

@@ -55,3 +55,6 @@ backend/ml/saved/
 *.pyc
 .env
 node_modules/
+
+dist/
+

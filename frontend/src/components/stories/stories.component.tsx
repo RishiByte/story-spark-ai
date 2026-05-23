@@ -201,11 +201,10 @@ const handleClearPrompt = () => {
                 <span className="text-gray-400 text-xs">Per Month</span>{" "}
                 {getRequestLimit(userRole?.subscriptionType as string)}
               </span>
-              <Link to="/pricing">
-                <span className="border-l border-white/20 pl-2 text-gray-300 cursor-pointer">
-                  Upgrade
-                </span>
+              <Link to="/pricing" className="border-1 border-white/20 pl-2 text-gray-300">
+               Upgrade
               </Link>
+              
               <i className="fas fa-bolt text-yellow-400"></i>
             </button>
             <div className="mt-3 text-gray-500 text-xs text-center md:text-right">
