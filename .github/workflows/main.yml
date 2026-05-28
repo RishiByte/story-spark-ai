@@ -23,5 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm install --include=optional
 
+      - name: Work around npm optional dependency bug (Rollup Linux binary)
+        run: npm install -w story-spark-ai-frontend --no-save @rollup/rollup-linux-x64-gnu
+
       - name: Build
         run: npm run build
