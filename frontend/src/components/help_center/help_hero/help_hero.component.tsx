@@ -36,9 +36,9 @@ const HelpHero: FC<HelpHeroProps> = ({
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Link to="/" className="inline-block mb-8">
-          <div className="bg-white hover:bg-slate-50 text-slate-700 px-3 py-2 flex items-center gap-2 transition-all duration-300 rounded-lg border border-slate-200 shadow-sm dark:bg-gradient-to-r dark:from-white/20 dark:to-white/10 dark:hover:from-white/30 dark:hover:to-white/20 dark:text-gray-300 dark:border-white/10">
+          <div className="bg-white hover:bg-slate-50 text-slate-700 px-3 py-2 flex items-center gap-2 transition-all duration-300 rounded-lg border border-slate-200 shadow-sm dark:bg-slate-800/50 dark:hover:bg-slate-700/80 dark:hover:border-slate-600 dark:text-gray-300 dark:border-slate-700">
             <i className="fa-solid fa-left-long" aria-hidden="true"></i>
-            BACK
+            Back to Home
           </div>
         </Link>
 
