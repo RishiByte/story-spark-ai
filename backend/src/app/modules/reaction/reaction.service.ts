@@ -21,14 +21,24 @@ const toggleReaction = async (
     throw new ApiError(httpStatus.BAD_REQUEST, "Post not found!");
   }
 
- main
+  const existingReaction = await Reaction.findOne({
+    postId: new Types.ObjectId(postId),
+    userId: user._id,
+    type,
+  });
+
+  if (existingReaction) {
+    await Reaction.deleteOne({ _id: existingReaction._id });
+    await Post.updateOne({ _id: postId }, { $pull: { reactions: existingReaction._id } });
+    return { message: "Reaction removed", reacted: false };
+  } else {
     const newReaction = await Reaction.create({
       postId: new Types.ObjectId(postId),
       userId: user._id,
-      type: type,
+      type,
     });
- main
-    };
+    await Post.updateOne({ _id: postId }, { $addToSet: { reactions: newReaction._id } });
+    return { message: "Reaction added", reacted: true };
   }
 };
 

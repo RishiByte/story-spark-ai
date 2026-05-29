@@ -335,6 +335,11 @@ const deletePost = async (postId: string, token: ITokenPayload) => {
   return post;
 };
 
+const getGenres = async (): Promise<string[]> => {
+  const genres = await Post.distinct("tag", { isDeleted: { $ne: true }, tag: { $nin: [null, ""] } });
+  return genres.sort();
+};
+
 export const PostService = {
   createPost,
   getPosts,
@@ -346,5 +351,6 @@ export const PostService = {
   toggleBookmark,
   updatePost,
   deletePost,
+  getGenres,
 };
 

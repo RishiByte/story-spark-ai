@@ -24,6 +24,7 @@ router.post(
 router.get("/lists", PostController.getPosts);
 router.get("/latest-lists", PostController.getLatestPosts);
 router.get("/feature-lists", PostController.getFeaturedPosts);
+router.get("/genres", PostController.getGenres);
 
 router.post(
   "/:postId",

@@ -126,6 +126,16 @@ const deletePost = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getGenres = catchAsync(async (_req: Request, res: Response) => {
+  const result = await PostService.getGenres();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Genres fetched successfully!",
+    data: result,
+  });
+});
+
 export const PostController = {
   createPost,
   getPosts,
@@ -137,5 +147,6 @@ export const PostController = {
   toggleBookmark,
   updatePost,
   deletePost,
+  getGenres,
 };
 
