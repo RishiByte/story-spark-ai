@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { connectSocket, getSocketIo } from "../../socket/socket.oi";
+import { connectCollabSocket } from "../../socket/socket.oi";
 import { getUserInfo, isLoggedIn } from "../../services/auth.service";
 
 export default function CollabHome() {
@@ -18,28 +18,26 @@ export default function CollabHome() {
 
     try {
       setIsCreating(true);
-      const socket = connectSocket();
-      if (!socket) {
+      const collabSocket = connectCollabSocket();
+      if (!collabSocket) {
         setError(
           "Socket.IO connection failed. Please check VITE_SOCKET_URL in frontend/.env"
         );
         return;
       }
 
-      const collabSocket = socket.io.of("/collab");
-
-      collabSocket.emit(
-        "collab:create_room",
-        { userId: user?.userId, username: user?.name },
-        (response: any) => {
-          if (response && response.roomId) {
-            navigate(`/collab/${response.roomId}`);
-          } else {
-            setError("Failed to create room. Please try again.");
-          }
-          setIsCreating(false);
+      collabSocket.once("collab:room_created", (response: { roomId?: string }) => {
+        if (response.roomId) {
+          navigate(`/collab/${response.roomId}`);
+        } else {
+          setError("Failed to create room. Please try again.");
         }
-      );
+        setIsCreating(false);
+      });
+      collabSocket.emit("collab:create_room", {
+        userId: user?.userId,
+        username: user?.name,
+      });
     } catch (err) {
       console.error("Create room error:", err);
       setError("Error creating room. Please try again.");

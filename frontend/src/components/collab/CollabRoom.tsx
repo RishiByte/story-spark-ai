@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getSocketIo, connectSocket } from "../../socket/socket.oi";
+import { connectCollabSocket, getCollabSocket } from "../../socket/socket.oi";
 import { isLoggedIn, getUserInfo } from "../../services/auth.service";
 
 interface Participant {
@@ -43,18 +43,14 @@ export default function CollabRoom() {
     }
 
     try {
-      const socket = connectSocket();
-      if (!socket) {
+      const collabSocket = connectCollabSocket();
+      if (!collabSocket) {
         setError("Socket.IO connection failed. Please check VITE_SOCKET_URL in frontend/.env");
         setLoading(false);
         return;
       }
 
-      // Connect to collab namespace
-      const collabSocket = socket.io.of("/collab");
-
-      // Request room info
-      collabSocket.emit("collab:get_room", { roomId }, (response: any) => {
+      const handleJoined = (response: any) => {
         if (response && response.room) {
           setRoom(response.room);
           setError(null);
@@ -62,7 +58,7 @@ export default function CollabRoom() {
           setError("Room not found");
         }
         setLoading(false);
-      });
+      };
 
       // Listen for room updates
       const handleRoomUpdated = (data: any) => {
@@ -77,16 +73,22 @@ export default function CollabRoom() {
         }
       };
 
-      collabSocket.on("collab:room_updated", handleRoomUpdated);
-      collabSocket.on("collab:story_updated", handleStoryUpdated);
-      collabSocket.on("collab:error", (data: any) => {
+      const handleCollabError = (data: any) => {
         setError(data.message);
         setLoading(false);
-      });
+      };
+
+      collabSocket.once("collab:joined", handleJoined);
+      collabSocket.on("collab:room_updated", handleRoomUpdated);
+      collabSocket.on("collab:story_updated", handleStoryUpdated);
+      collabSocket.on("collab:error", handleCollabError);
+      collabSocket.emit("collab:join_room", { roomId });
 
       return () => {
+        collabSocket.off("collab:joined", handleJoined);
         collabSocket.off("collab:room_updated", handleRoomUpdated);
         collabSocket.off("collab:story_updated", handleStoryUpdated);
+        collabSocket.off("collab:error", handleCollabError);
       };
     } catch (err) {
       console.error("Collab error:", err);
@@ -98,9 +100,9 @@ export default function CollabRoom() {
   const handleAddText = () => {
     if (!newText.trim() || !user) return;
 
-    const socket = getSocketIo();
+    const socket = getCollabSocket();
     if (socket) {
-      socket.io.of("/collab").emit("collab:add_text", {
+      socket.emit("collab:add_text", {
         roomId,
         userId: user.userId,
         text: newText,
@@ -110,9 +112,9 @@ export default function CollabRoom() {
   };
 
   const handleAIContinue = () => {
-    const socket = getSocketIo();
+    const socket = getCollabSocket();
     if (socket) {
-      socket.io.of("/collab").emit("collab:ai_continue", { roomId });
+      socket.emit("collab:ai_continue", { roomId });
     }
   };
 
