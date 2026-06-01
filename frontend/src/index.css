@@ -673,7 +673,7 @@ body {
 *,
 *::before,
 *::after {
-  box-sizing: inherit;
+  box-sizing: border-box;
 }
 
 button,
@@ -1404,4 +1404,3 @@ html, body {
     padding: 0.5rem 0;
   }
 }
-
